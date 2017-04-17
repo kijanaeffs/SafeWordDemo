@@ -1,6 +1,8 @@
 package controller;
 
-
+import com.twilio.Twilio;
+import com.twilio.rest.api.v2010.account.Message;
+import com.twilio.type.PhoneNumber;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +14,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class ListeningScreenController {
+    //Note, need credentials in order to send SMS
+    public static final String ACCOUNT_SID = "";
+    public static final String AUTH_TOKEN = "";
 
     @FXML
     private Button listeningButton;
@@ -36,16 +41,24 @@ public class ListeningScreenController {
 
     /**
      * Method to send an SMS message when "Send SMS" button is pressed.
+     * This method needs credentials in order to work correctly.
      * @throws IOException
      */
     @FXML
     private void handleSMSPressed() throws IOException {
-        // For now this button will simply show an error message
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Uh Oh!");
-        alert.setHeaderText("Button Under Construction");
-        alert.setContentText("This function has not been implemented yet");
 
+        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+
+        Message message = Message.creator(new PhoneNumber("+17706588307"),
+                new PhoneNumber("+16783744106"),
+                "- -\nHello World!\nFrom SafeWord Mobile").create();
+
+        System.out.println(message.getSid());
+
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("SafeWord Message Sent");
+        alert.setHeaderText("Congratulations!");
+        alert.setContentText("Your message has been sent.");
         alert.showAndWait();
 
     }
